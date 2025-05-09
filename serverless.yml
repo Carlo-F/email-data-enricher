@@ -6,8 +6,8 @@ provider:
   stage: dev
   region: eu-west-1
   # Rimuovi temporaneamente l'environment section per il test locale
-  # environment:
-  #   BREVO_API_KEY: ${env:BREVO_API_KEY}
+  environment:
+    BREVO_API_KEY: ${env:BREVO_API_KEY}
 
 functions:
   webhook:
