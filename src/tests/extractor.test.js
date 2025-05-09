@@ -52,7 +52,7 @@ test('Analisi del campione di email per estrazione nomi', () => {
   expect(results.length).toBe(sampleEmails.length);
   
   // Test addizionale per verificare un caso noto
-  const testEmail = "federicamolle50@gmail.com";
+  const testEmail = "federicamullo@gmail.com";
   const testResult = extractFirstName(testEmail);
   expect(testResult).toBe("Federica");
 });

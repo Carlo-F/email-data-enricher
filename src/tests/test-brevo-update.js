@@ -2,7 +2,7 @@ const { getBrevoContact, updateBrevoContact } = require('../services/brevo');
 const { extractFirstName } = require('../utils/extractor');
 
 // Email di un contatto esistente nella tua lista Brevo
-const targetEmail = "carlofeniello@hotmail.it"; // Sostituisci con l'email da testare
+const targetEmail = "carlo@hotmail.it"; // Sostituisci con l'email da testare
 
 // Estrai il nome e aggiorna il contatto
 async function testConditionalUpdate() {

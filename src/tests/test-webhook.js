@@ -44,7 +44,7 @@ async function simulateWebhook(email) {
 }
 
 // Email da testare
-const testEmail = "carlofeniello@hotmail.it"; // Cambia con una email di test
+const testEmail = "carlo@hotmail.it"; // Cambia con una email di test
 
 // Avvia il test
 simulateWebhook(testEmail);

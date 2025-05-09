@@ -4,7 +4,7 @@ Un sistema serverless per estrarre automaticamente i nomi dalle email degli iscr
 
 ## 📋 Descrizione
 
-Email Data Enricher analizza gli indirizzi email degli iscritti alla tua newsletter, identifica i nomi propri contenuti negli indirizzi (es. "federica.molle@gmail.com" → "Federica") e li utilizza per popolare automaticamente il campo FIRSTNAME nei contatti Brevo. Questo consente di personalizzare le comunicazioni email senza richiedere ai tuoi iscritti di compilare campi aggiuntivi durante la registrazione.
+Email Data Enricher analizza gli indirizzi email degli iscritti alla tua newsletter, identifica i nomi propri contenuti negli indirizzi (es. "federica.mullo@gmail.com" → "Federica") e li utilizza per popolare automaticamente il campo FIRSTNAME nei contatti Brevo. Questo consente di personalizzare le comunicazioni email senza richiedere ai tuoi iscritti di compilare campi aggiuntivi durante la registrazione.
 
 ## ✨ Funzionalità
 
@@ -42,7 +42,7 @@ STAGE=dev
 ```
 
 2. **Prepara il database dei nomi**
-   
+
    Crea una cartella `data` nella root con un file `italian_names.txt` contenente un nome italiano per riga.
 
 ## 🚀 Utilizzo
@@ -56,7 +56,7 @@ npm start
 # In un altro terminale, testa l'estrazione
 curl -X POST http://localhost:3000/dev/webhook \
   -H "Content-Type: application/json" \
-  -d '{"email": "federica.molle@gmail.com"}'
+  -d '{"email": "federica.mullo@gmail.com"}'
 ```
 
 ### Script di Test
@@ -107,6 +107,7 @@ email-data-enricher/
 ## 📊 Logica di Estrazione
 
 L'estrattore di nomi:
+
 1. Analizza l'indirizzo email alla ricerca di pattern comuni (nome.cognome, etc.)
 2. Cerca corrispondenze con un database di nomi italiani
 3. Valida i risultati applicando regole di lunghezza (min. 5 caratteri)
@@ -114,18 +115,20 @@ L'estrattore di nomi:
 
 ```javascript
 // Esempio di utilizzo
-const { extractFirstName } = require('./src/utils/extractor');
-const firstName = extractFirstName('federica.molle@gmail.com');
+const { extractFirstName } = require("./src/utils/extractor");
+const firstName = extractFirstName("federica.mullo@gmail.com");
 console.log(firstName); // Output: 'Federica'
 ```
 
 ## 🔄 Integrazione con Brevo
 
 Il sistema si integra con Brevo in due modi:
+
 1. **API diretta**: Per aggiornamenti manuali o batch di contatti
 2. **Webhooks**: Per elaborazione automatica di nuove iscrizioni
 
 ### Configurazione Webhook Brevo
+
 1. Accedi alla dashboard Brevo
 2. Vai su Automation > Webhooks
 3. Crea un nuovo webhook
