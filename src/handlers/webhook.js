@@ -6,11 +6,43 @@ const { getBrevoContact, updateBrevoContact } = require('../services/brevo');
  */
 async function handler(event, context) {
   try {
-    console.log('Ricevuto webhook:', event.body);
+    console.log('Evento ricevuto:', JSON.stringify(event, null, 2));
     
-    // Estrai dati dal webhook di Brevo
-    const webhookData = JSON.parse(event.body);
+    // Estrai il payload correttamente sia da Function URL che API Gateway
+    let webhookData;
+    
+    if (event.body) {
+      // Caso Function URL o API Gateway con integrazione proxy
+      console.log('Formato rilevato: Function URL o API Gateway proxy');
+      try {
+        webhookData = typeof event.body === 'string' ? JSON.parse(event.body) : event.body;
+      } catch (e) {
+        console.error('Errore parsing JSON dal body:', e);
+        return {
+          statusCode: 400,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+          body: JSON.stringify({ 
+            error: 'Payload non valido', 
+            message: e.message 
+          })
+        };
+      }
+    } else {
+      // Caso API Gateway non-proxy o invocazione diretta
+      console.log('Formato rilevato: API Gateway non-proxy o invocazione diretta');
+      webhookData = event;
+    }
+    
+    console.log('Payload processato:', JSON.stringify(webhookData, null, 2));
+    
+    // Verifica campi obbligatori per webhook Brevo
     const email = webhookData.email;
+    const eventType = webhookData.event;
+    
+    console.log(`Tipo evento: ${eventType}, Email: ${email}`);
     
     if (!email) {
       console.error('Email mancante nel payload');
@@ -24,9 +56,10 @@ async function handler(event, context) {
       };
     }
     
-    // Verifica evento (opzionale)
-    const eventType = webhookData.event;
-    console.log(`Tipo evento: ${eventType}`);
+    // Verifica che sia un evento supportato (opzionale)
+    if (eventType !== 'list_addition' && eventType) {
+      console.log(`Tipo evento ${eventType} diverso da list_addition, ma procedo comunque`);
+    }
     
     // Recupera i dettagli completi del contatto da Brevo
     console.log(`Recupero dettagli contatto per ${email}...`);
