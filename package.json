@@ -1,0 +1,27 @@
+{
+  "name": "email-data-enricher",
+  "version": "1.0.0",
+  "description": "Estrai nomi dalle email per arricchire i contatti newsletter",
+  "main": "index.js",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "start": "serverless offline start",
+    "test": "jest",
+    "deploy": "serverless deploy"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.19.8",
+    "jest": "^29.7.0",
+    "serverless": "^3.38.0",
+    "serverless-dotenv-plugin": "^6.0.0",
+    "serverless-esbuild": "^1.48.5",
+    "serverless-offline": "^13.3.0"
+  }
+}

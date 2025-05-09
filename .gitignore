@@ -1,0 +1,54 @@
+# Dipendenze
+node_modules/
+package-lock.json
+yarn.lock
+
+# File di build
+.esbuild/
+.serverless/
+.webpack/
+dist/
+build/
+
+# Ambientes e configurazioni locali
+.env
+.env.*
+!.env.example
+config.local.js
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Coverage e test reports
+coverage/
+.nyc_output/
+junit.xml
+
+# Temporanei del SO
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editor e IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# Specifici per AWS
+.aws-sam/
+samconfig.toml
+
+# Altri
+.tmp/
+.cache/
+tmp/
+temp/

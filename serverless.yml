@@ -1,0 +1,33 @@
+service: email-data-enricher
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: dev
+  region: eu-west-1
+  # Rimuovi temporaneamente l'environment section per il test locale
+  # environment:
+  #   BREVO_API_KEY: ${env:BREVO_API_KEY}
+
+functions:
+  webhook:
+    handler: src/handlers/webhook.handler
+    events:
+      - http:
+          path: webhook
+          method: post
+          cors: true
+
+plugins:
+  - serverless-offline
+  - serverless-esbuild  # Se hai installato questo plugin
+
+custom:
+  serverless-offline:
+    httpPort: 3000
+  esbuild:
+    bundle: true
+    minify: false
+    sourcemap: true
+    target: 'node20'
+    platform: 'node'
