@@ -45,6 +45,53 @@ async function getBrevoContact(email) {
   }
 }
 
+async function getBrevoContacts(limit = 500, offset = 0, allContacts = []) {
+  try {
+    console.log(`Recupero contatti: offset=${offset}, limit=${limit}`);
+    const response = await axios.get('https://api.brevo.com/v3/contacts', {
+      headers: { 'api-key': process.env.BREVO_API_KEY },
+      params: { limit, offset }
+    });
+    
+    const newContacts = response.data.contacts || [];
+    
+    // Filtra contatti con email valide
+    const validContacts = newContacts.filter(contact => {
+      if (!contact.email || contact.email === 'undefined') {
+        console.log(`⚠️ Contatto ignorato: email non valida o undefined`);
+        return false;
+      }
+      return true;
+    });
+    
+    const contacts = [...allContacts, ...validContacts];
+    
+    console.log(`Recuperati ${newContacts.length} contatti. Totale finora: ${contacts.length}/${response.data.total}`);
+    
+    // Se ci sono più contatti, recupera la pagina successiva
+    if (response.data.count + offset < response.data.total) {
+      // Breve pausa per evitare rate limiting
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      return getBrevoContacts(limit, offset + limit, contacts);
+    }
+    
+    return contacts;
+  } catch (error) {
+    console.error('Errore nel recupero dei contatti:', error.message);
+    if (error.response) {
+      console.error('Dettagli errore API:', error.response.data);
+      
+      // In caso di rate limiting, attendi e riprova
+      if (error.response.status === 429) {
+        console.log('Rate limit raggiunto, attesa di 60 secondi...');
+        await new Promise(resolve => setTimeout(resolve, 60000));
+        return getBrevoContacts(limit, offset, allContacts);
+      }
+    }
+    throw error;
+  }
+}
+
 /**
  * Aggiorna un contatto su Brevo
  * @param {string} email - Email del contatto
@@ -180,5 +227,6 @@ async function updateBrevoContact(email, data) {
 
 module.exports = {
   getBrevoContact,
+  getBrevoContacts,
   updateBrevoContact
 };
